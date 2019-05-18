@@ -1,0 +1,7 @@
+{
+    "Name": ".NET Core, mała liczba wierszy, tabela",
+    "Url": "https://localhost:5001/home/astable?take=100",
+    "Discard": 10,
+    "Repeat": 100,
+    "LogResponse": false
+}
