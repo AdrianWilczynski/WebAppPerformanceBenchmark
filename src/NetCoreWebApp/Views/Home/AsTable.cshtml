@@ -1,0 +1,80 @@
+﻿@model IEnumerable<Movie>
+
+@{
+    ViewData["Title"] = "Table";
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">color</th>
+            <th scope="col">director_name</th>
+            <th scope="col">num_critic_for_reviews</th>
+            <th scope="col">duration</th>
+            <th scope="col">director_facebook_likes</th>
+            <th scope="col">actor_3_facebook_likes</th>
+            <th scope="col">actor_2_name</th>
+            <th scope="col">actor_1_facebook_likes</th>
+            <th scope="col">gross</th>
+            <th scope="col">genres</th>
+            <th scope="col">actor_1_name</th>
+            <th scope="col">movie_title</th>
+            <th scope="col">num_voted_users</th>
+            <th scope="col">cast_total_facebook_likes</th>
+            <th scope="col">actor_3_name</th>
+            <th scope="col">facenumber_in_poster</th>
+            <th scope="col">plot_keywords</th>
+            <th scope="col">movie_imdb_link</th>
+            <th scope="col">num_user_for_reviews</th>
+            <th scope="col">language</th>
+            <th scope="col">country</th>
+            <th scope="col">content_rating</th>
+            <th scope="col">budget</th>
+            <th scope="col">title_year</th>
+            <th scope="col">actor_2_facebook_likes</th>
+            <th scope="col">imdb_score</th>
+            <th scope="col">aspect_ratio</th>
+            <th scope="col">movie_facebook_likes</th>
+        </tr>
+  </thead>
+  <tbody>
+      @foreach (var (movie, index) in Model.Select((movie, index) => (movie, index)))
+      {
+        <tr>
+            <th scope="row">@(index + 1)</th>
+            <td>@movie.color</td>
+            <td>@movie.director_name</td>
+            <td>@movie.num_critic_for_reviews</td>
+            <td>@movie.duration</td>
+            <td>@movie.director_facebook_likes</td>
+            <td>@movie.actor_3_facebook_likes</td>
+            <td>@movie.actor_2_name</td>
+            <td>@movie.actor_1_facebook_likes</td>
+            <td>@movie.gross</td>
+            <td>@movie.genres</td>
+            <td>@movie.actor_1_name</td>
+            <td>@movie.movie_title</td>
+            <td>@movie.num_voted_users</td>
+            <td>@movie.cast_total_facebook_likes</td>
+            <td>@movie.actor_3_name</td>
+            <td>@movie.facenumber_in_poster</td>
+            <td>@movie.plot_keywords</td>
+            <td>@movie.movie_imdb_link</td>
+            <td>@movie.num_user_for_reviews</td>
+            <td>@movie.language</td>
+            <td>@movie.country</td>
+            <td>@movie.content_rating</td>
+            <td>@movie.budget</td>
+            <td>@movie.title_year</td>
+            <td>@movie.actor_2_facebook_likes</td>
+            <td>@movie.imdb_score</td>
+            <td>@movie.aspect_ratio</td>
+            <td>@movie.movie_facebook_likes</td>
+        </tr>
+      }
+  </tbody>
+</table>
+
+
+
