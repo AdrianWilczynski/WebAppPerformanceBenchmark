@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NetCoreWebApp.Models;
 using NetCoreWebApp.Services;
 
 namespace NetCoreWebApp
@@ -18,12 +19,12 @@ namespace NetCoreWebApp
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<MovieDataProvider>();
+            services.AddSingleton<DataProvider<Movie>>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, MovieDataProvider movieDataProvider)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, DataProvider<Movie> movieDataProvider)
         {
             if (env.IsDevelopment())
             {
@@ -46,7 +47,7 @@ namespace NetCoreWebApp
             });
 
             // Source: https://www.kaggle.com/carolzhangdc/imdb-5000-movie-dataset/
-            movieDataProvider.ReadData("Data/movie_metadata.csv");
+            movieDataProvider.LoadData("Data/movie_metadata.csv");
         }
     }
 }
