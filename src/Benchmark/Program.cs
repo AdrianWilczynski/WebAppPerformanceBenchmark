@@ -37,14 +37,7 @@ namespace Benchmark
 
                     durations.Add(stopwatch.Elapsed);
 
-                    if (profile.LogResponse)
-                    {
-                        Console.WriteLine(response);
-                    }
-                    else
-                    {
-                        Console.WriteLine($"{i + 1}/{profile.Repeat}");
-                    }
+                    Console.WriteLine(profile.LogResponse ? response : $"{i + 1}/{profile.Repeat}");
                 }
             }
 
