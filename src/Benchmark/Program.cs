@@ -15,7 +15,7 @@ namespace Benchmark
         {
             var profile = LoadProfile(args[0]);
             var durations = await Measure(profile);
-            WriteToFile(profile, durations, durations.Average(), durations.Median());
+            WriteToFile(profile, durations, durations.Average(), durations.Median(), durations.Total());
         }
 
         public static Profile LoadProfile(string path)
@@ -55,8 +55,11 @@ namespace Benchmark
         public static TimeSpan Average(this IEnumerable<TimeSpan> durations)
             => new TimeSpan((long)durations.Average(d => d.Ticks));
 
+        public static TimeSpan Total(this IEnumerable<TimeSpan> durations)
+            => durations.Aggregate((sum, current) => sum + current);
+
         public static void WriteToFile(Profile profile, IEnumerable<TimeSpan> durations,
-            TimeSpan average, TimeSpan median)
+            TimeSpan average, TimeSpan median, TimeSpan total)
         {
             var content = JsonConvert.SerializeObject(new
             {
@@ -71,7 +74,8 @@ namespace Benchmark
                 Analysis = new
                 {
                     Average = average,
-                    Median = median
+                    Median = median,
+                    Total = total
                 }
             }, Formatting.Indented);
 
