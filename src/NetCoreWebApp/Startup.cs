@@ -45,6 +45,7 @@ namespace NetCoreWebApp
                     template: "{controller=Home}/{action=AsTable}");
             });
 
+            // Source: https://www.kaggle.com/carolzhangdc/imdb-5000-movie-dataset/
             movieDataProvider.ReadData("Data/movie_metadata.csv");
         }
     }
