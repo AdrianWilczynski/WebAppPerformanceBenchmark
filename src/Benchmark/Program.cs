@@ -14,15 +14,17 @@ namespace Benchmark
         public static async Task Main(string[] args)
         {
             var profile = LoadProfile(args[0]);
-            var durations = await Measure(profile);
-            WriteToFile(profile, durations, durations.Average(), durations.Median(), durations.Total());
+            var result = await Measure(profile);
+            WriteToFile(profile, result.durations, result.failed,
+                result.durations.Average(), result.durations.Median(), result.durations.Total());
         }
 
         public static Profile LoadProfile(string path)
             => JsonConvert.DeserializeObject<Profile>(File.ReadAllText(path));
 
-        public async static Task<IEnumerable<TimeSpan>> Measure(Profile profile)
+        public async static Task<(IEnumerable<TimeSpan> durations, int failed)> Measure(Profile profile)
         {
+            var failed = 0;
             var durations = new List<TimeSpan>();
             using (var httpClinet = new HttpClient())
             {
@@ -31,17 +33,26 @@ namespace Benchmark
                     var stopwatch = new Stopwatch();
                     stopwatch.Start();
 
-                    var response = await httpClinet.GetStringAsync(profile.Url);
+                    var response = await httpClinet.GetAsync(profile.Url);
 
                     stopwatch.Stop();
 
-                    durations.Add(stopwatch.Elapsed);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        durations.Add(stopwatch.Elapsed);
+                    }
+                    else
+                    {
+                        failed++;
+                    }
 
-                    Console.WriteLine(profile.LogResponse ? response : $"{i + 1}/{profile.Repeat}");
+                    Console.WriteLine(profile.LogResponse
+                        ? await response.Content.ReadAsStringAsync()
+                        : $"{i + 1}/{profile.Repeat}");
                 }
             }
 
-            return durations.Skip(profile.Discard);
+            return (durations.Skip(profile.Discard), failed);
         }
 
         public static TimeSpan Median(this IEnumerable<TimeSpan> durations)
@@ -58,7 +69,7 @@ namespace Benchmark
         public static TimeSpan Total(this IEnumerable<TimeSpan> durations)
             => durations.Aggregate((sum, current) => sum + current);
 
-        public static void WriteToFile(Profile profile, IEnumerable<TimeSpan> durations,
+        public static void WriteToFile(Profile profile, IEnumerable<TimeSpan> durations, int failed,
             TimeSpan average, TimeSpan median, TimeSpan total)
         {
             var content = JsonConvert.SerializeObject(new
@@ -67,9 +78,10 @@ namespace Benchmark
                 Durations = durations,
                 Count = new
                 {
-                    All = profile.Repeat,
+                    Requested = profile.Repeat,
                     Discarded = profile.Discard,
-                    Measured = durations.Count()
+                    Measured = durations.Count(),
+                    Failed = failed,
                 },
                 Analysis = new
                 {
