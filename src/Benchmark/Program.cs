@@ -14,9 +14,8 @@ namespace Benchmark
         public static async Task Main(string[] args)
         {
             var profile = LoadProfile(args[0]);
-            var result = await Measure(profile);
-            WriteToFile(profile, result.durations, result.failed,
-                result.durations.Average(), result.durations.Median(), result.durations.Total());
+            var (durations, failed) = await Measure(profile);
+            WriteToFile(profile, durations, failed, durations.Average(), durations.Median(), durations.Total());
         }
 
         public static Profile LoadProfile(string path)
