@@ -17,10 +17,11 @@ namespace NetCoreWebApp.Services
 
         public void LoadData(string path)
         {
-            var streamReader = new StreamReader(Path.Join(_hostingEnvironment.ContentRootPath, path));
-            var csvReader = new CsvReader(streamReader);
-
-            Records = csvReader.GetRecords<T>().ToList();
+            using (var streamReader = new StreamReader(Path.Join(_hostingEnvironment.ContentRootPath, path)))
+            using (var csvReader = new CsvReader(streamReader))
+            {
+                Records = csvReader.GetRecords<T>().ToList();
+            }
         }
 
         public IEnumerable<T> Records { get; private set; }
