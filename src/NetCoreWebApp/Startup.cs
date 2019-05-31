@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Globalization;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -26,6 +27,10 @@ namespace NetCoreWebApp
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, DataProvider<Movie> movieDataProvider)
         {
+            var defaultCulture = new CultureInfo("en-US");
+            CultureInfo.DefaultThreadCurrentCulture = defaultCulture;
+            CultureInfo.DefaultThreadCurrentUICulture = defaultCulture;
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
