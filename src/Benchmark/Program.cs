@@ -90,7 +90,9 @@ namespace Benchmark
                 }
             }, Formatting.Indented);
 
-            File.WriteAllText(profile.Name + ".result.json", content);
+            File.WriteAllText(
+                Path.Join(System.Environment.CurrentDirectory, profile.Name + ".result.json"),
+                content);
         }
     }
 }
